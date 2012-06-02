@@ -1,7 +1,7 @@
 Humbleshot::Application.routes.draw do
-  get "woot/show"
+  get '/png.png' => 'woot#show'
 
-  match '/png.png' => 'woot#show'
+  root to: "woot#show"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
