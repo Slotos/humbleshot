@@ -1,4 +1,6 @@
 class Woot
+  include Magick
+
   @@time = 1.hour.ago
   def self.regenerate?
     @@time < 1.minute.ago ? true : false
@@ -11,8 +13,17 @@ class Woot
   def self.fetch!(that, here)
     `phantomjs #{Rails.root}/rasterize.js http://www.humblebundle.com/ #{that}`
 
-    image = Magick::Image.read(that).first
-    image.crop!(175,1465,770,230)
+    image = ImageList.new(that)
+    image.crop!(175,1465,770,240, true)
+
+    text = Draw.new
+    text.annotate(image, 0,0,5,0, "screenshot generated at #{Time.now.strftime("%H:%M:%S")}") {
+      self.fill = 'black'
+      self.stroke = 'transparent'
+      self.pointsize = 12
+      self.font_weight = NormalWeight
+      self.gravity = SouthEastGravity
+    }
 
     result = image.to_blob
     Rails.cache.write(here, result)
