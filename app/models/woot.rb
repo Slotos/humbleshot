@@ -17,7 +17,7 @@ class Woot
     image.crop!(175,1465,770,240, true)
 
     text = Draw.new
-    text.annotate(image, 0,0,5,0, "screenshot generated at #{Time.now.strftime("%H:%M:%S")}") {
+    text.annotate(image, 0,0,5,0, "Screenshot generated at #{Time.now.strftime("%H:%M:%S")} GMT") {
       self.fill = 'black'
       self.stroke = 'transparent'
       self.pointsize = 12
