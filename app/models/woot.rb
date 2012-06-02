@@ -14,7 +14,10 @@ class Woot
     image = Magick::Image.read(that).first
     image.crop!(175,1465,770,230)
 
-    image.write here
+    result = image.to_blob
+    Rails.cache.write(here, result)
     regenerated!
+
+    result
   end
 end

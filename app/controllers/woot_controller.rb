@@ -4,17 +4,17 @@ class WootController < ApplicationController
     expires_now
 
     tempfile = "#{Rails.root}/humbleshot.png"
-    vail = "#{Rails.root}/dick-in-a-box.png"
+    vail = 'box'
 
-    if File.exist?(vail)
-      if !File.exist?(tempfile) || Woot.regenerate?
+    if chart = Rails.cache.read(vail)
+      if Woot.regenerate?
         Woot.delay.fetch!(tempfile, vail)
         Woot.regenerated!
       end
     else
-      Woot.fetch!(tempfile, vail)
+      chart = Woot.fetch!(tempfile, vail)
     end
 
-    send_file vail, :type => 'image/png', :disposition => 'inline'
+    send_data chart, :type => 'image/png', :disposition => 'inline'
   end
 end

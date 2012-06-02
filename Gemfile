@@ -18,6 +18,8 @@ gem 'delayed_job_active_record'
 gem 'foreman'
 gem 'thin'
 
+gem 'dalli'
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
