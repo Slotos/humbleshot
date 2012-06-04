@@ -1,7 +1,13 @@
 class Woot
   include Magick
+  @@url = Settings.url
+  @@xoffset = Settings.xoffset
+  @@yoffset = Settings.yoffset
+  @@width = Settings.width
+  @@height = Settings.height
 
   @@time = 1.hour.ago
+
   def self.regenerate?
     @@time < 1.minute.ago ? true : false
   end
@@ -11,13 +17,13 @@ class Woot
   end
 
   def self.fetch!(that, here)
-    `phantomjs #{Rails.root}/rasterize.js http://www.humblebundle.com/ #{that}`
+    `phantomjs #{Rails.root}/rasterize.js #{@@url} #{that}`
 
     image = ImageList.new(that)
-    image.crop!(175,1465,770,240, true)
+    image.crop!(@@xoffset, @@yoffset, @@width, @@height, true)
 
     text = Draw.new
-    text.annotate(image, 0,0,5,0, "Screenshot generated at #{Time.now.strftime("%H:%M:%S")} GMT") {
+    text.annotate(image, 0,0,5,0, "Screenshot generated at #{Time.now.utc.strftime("%H:%M:%S")} UTC") {
       self.fill = 'black'
       self.stroke = 'transparent'
       self.pointsize = 12
